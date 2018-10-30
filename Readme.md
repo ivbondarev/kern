@@ -14,3 +14,7 @@ qemu-system-i386 -drive format=raw,file=bootloader
 or with gdb:
 qemu-system-i386 -drive format=raw,file=bootloader -S -gdb tcp::9000
 In gdb: target remote localhost:9000
+
+Kernel loader:
+gcc -c bootlaoder.c
+ld bootloader.o -o kern.bin -oformat=binary -Ttext=0x100000
