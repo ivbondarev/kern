@@ -15,13 +15,13 @@ asm_main:
 	mov si, DAP
 	mov ah, 0x42
 	int 0x13
-	jmp $
+	call 0x8000 ; _start() function, 0x7E00 + 0x200
 
 segment .data
 DAP:
 	db 0x10 ; DAP size
 	db 0 ; unused
-	dw 1 ; number of sectors
+	dw 10 ; number of sectors
 	dw 0x7E00 ; offset
 	dw 0 ; segment
 	dq 1 ; start sector

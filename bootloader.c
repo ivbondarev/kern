@@ -1,5 +1,6 @@
-void boot(void)
+void kmain(void)
 {
 	while (1)
 		;
+	return;
 }

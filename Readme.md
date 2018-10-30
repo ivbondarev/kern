@@ -17,4 +17,4 @@ In gdb: target remote localhost:9000
 
 Kernel loader:
 gcc -c bootlaoder.c
-ld bootloader.o -o kern.bin -oformat=binary -Ttext=0x100000
+ld bootloader.o -o kern.bin -format=binary -Ttext=0x100000
