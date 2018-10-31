@@ -4,6 +4,7 @@
 segment .text
 global asm_main
 asm_main:
+text_start:
 	cli
 	; Disable NMI
 	in al, 0x70
@@ -26,8 +27,11 @@ asm_main:
 	or al, 2
 	out 0x92, al
 	; Enable PM
-	; ljmp 0x0008:0x8000
-	call 0x8000 ; _start() function, 0x7E00 + 0x200
+	lgdt [gdt_info]
+	mov eax, cr0
+	or eax, 1
+	mov cr0, eax
+	jmp 0x08:0x8000 ; _start() function, 0x7E00 + 0x200v
 	jmp $
 
 segment .data
@@ -38,6 +42,27 @@ DAP:
 	dw 0x7E00 ; offset
 	dw 0 ; segment
 	dq 1 ; start sector
-	resb 454
+gdt:
+gdt_null:
+	dq 0
+gdt_code_seg:
+	dw 0xFFFF
+	dw 0
+	db 0
+	db 10001101b
+	db 11001111b
+	db 0
+gdt_data_seg:
+	dw 0xFFFF
+	dw 0
+	db 0
+	db 10010010b
+	db 11001111b
+	db 0
+gdt_info:
+	dw 23
+	dd gdt
+gdt_end:
+	times 404 db 0
 	db 0x55
 	db 0xAA
