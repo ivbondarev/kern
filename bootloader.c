@@ -27,7 +27,7 @@ static void set_gdt_entry(struct gdt_entry *ent, unsigned int base,
 			  unsigned int limit, unsigned char access_byte,
 			  unsigned char flags);
 
-void kmain(void)
+void _start(void)
 {
 	//kmemset(gdt_entries, 0, sizeof(gdt_entries));
 	/* null descriptor alread zeroed. */
