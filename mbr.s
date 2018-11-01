@@ -1,10 +1,12 @@
 [BITS 16]
 [ORG 0x7C00]
 
-segment .text
+%define roundup(size) ((size + 3) & ~3)
+
 global asm_main
+
+segment .text
 asm_main:
-text_start:
 	cli
 	; Disable NMI
 	in al, 0x70
@@ -31,10 +33,14 @@ text_start:
 	mov eax, cr0
 	or eax, 1
 	mov cr0, eax
-	jmp 0x08:0x8000 ; _start() function, 0x7E00 + 0x200v
+	jmp 0x08:0x8000 ; _start() function, 0x7E00 + 0x200
 	jmp $
 
+text_sect_size equ roundup(($ - $$))
+
 segment .data
+align 4
+align_size equ ($$ - text_sect_size)
 DAP:
 	db 0x10 ; DAP size
 	db 0 ; unused
@@ -63,6 +69,6 @@ gdt_info:
 	dw 23
 	dd gdt
 gdt_end:
-	times 404 db 0
+	times  (510 - text_sect_size - ($ - $$)) db 0
 	db 0x55
 	db 0xAA

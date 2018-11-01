@@ -21,6 +21,25 @@ struct gdt_entry {
 
 struct gdt_entry gdt_entries[4];
 
+static void kmemset(void *dst, char num, unsigned int sz);
+
+static void set_gdt_entry(struct gdt_entry *ent, unsigned int base,
+			  unsigned int limit, unsigned char access_byte,
+			  unsigned char flags);
+
+void kmain(void)
+{
+	kmemset(gdt_entries, 0, sizeof(gdt_entries));
+	/* null descriptor alread zeroed. */
+
+	// FIXME type & flags
+	//set_gdt_entry(&gdt_entries[1], 0, 0xFFFF, 0, 0);
+
+	while (1)
+		;
+	return;
+}
+
 static void kmemset(void *dst, char num, unsigned int sz)
 {
 	char *mem = (char *)dst;
@@ -43,17 +62,4 @@ static void set_gdt_entry(struct gdt_entry *ent, unsigned int base,
 	ent->base_high8 = (base >> 24) & 0xFF;
 	ent->flags = flags & 0xF;
 	ent->access_byte = access_byte;
-}
-
-void kmain(void)
-{
-	kmemset(gdt_entries, 0, sizeof(gdt_entries));
-	/* null descriptor alread zeroed. */
-
-	// FIXME type & flags
-	set_gdt_entry(&gdt_entries[1], 0, 0xFFFF, 0, 0);
-
-	while (1)
-		;
-	return;
 }
