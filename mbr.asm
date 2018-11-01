@@ -33,12 +33,12 @@ asm_main:
 	smsw ax
 	or ax, 1
 	lmsw ax
-	jmp 0x08:seg32 ; _start() function, 0x7E00 + 0x200
-
-[BITS 32]
-seg32:
-	mov eax, 0xdeadbeef
-	jmp $
+	mov ax, 0x16
+	mov ds, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+	jmp 0x08:0x8000 ; _start() function, 0x7E00 + 0x200
 
 text_sect_size equ roundup(($ - $$))
 
@@ -59,7 +59,7 @@ gdt_code_seg:
 	dw 0xFFFF
 	dw 0
 	db 0
-	db 10001101b
+	db 10011010b
 	db 11001111b
 	db 0
 gdt_data_seg:

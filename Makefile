@@ -4,8 +4,8 @@ qemu:
 qemu-gdb:
 	qemu-system-i386 -drive format=raw,file=bin/kern.bin -S -gdb tcp::9000
 
-mbr: mbr.s
-	nasm -f bin mbr.s -o bin/mbr.bin
+mbr: mbr.asm
+	nasm -f bin mbr.asm -o bin/mbr.bin
 
 bootloader: bootloader.c
 	gcc -O0 -m32 -march=i386 -c bootloader.c -o obj/bootloader.o
