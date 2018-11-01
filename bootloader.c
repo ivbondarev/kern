@@ -29,7 +29,7 @@ static void set_gdt_entry(struct gdt_entry *ent, unsigned int base,
 
 void kmain(void)
 {
-	kmemset(gdt_entries, 0, sizeof(gdt_entries));
+	//kmemset(gdt_entries, 0, sizeof(gdt_entries));
 	/* null descriptor alread zeroed. */
 
 	// FIXME type & flags

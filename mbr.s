@@ -30,10 +30,14 @@ asm_main:
 	out 0x92, al
 	; Enable PM
 	lgdt [gdt_info]
-	mov eax, cr0
-	or eax, 1
-	mov cr0, eax
-	jmp 0x08:0x8000 ; _start() function, 0x7E00 + 0x200
+	smsw ax
+	or ax, 1
+	lmsw ax
+	jmp 0x08:seg32 ; _start() function, 0x7E00 + 0x200
+
+[BITS 32]
+seg32:
+	mov eax, 0xdeadbeef
 	jmp $
 
 text_sect_size equ roundup(($ - $$))
