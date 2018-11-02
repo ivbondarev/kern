@@ -8,7 +8,7 @@ mbr: mbr.asm
 	nasm -f bin mbr.asm -o bin/mbr.bin
 
 bootloader: bootloader.c
-	gcc -O0 -m32 -march=i386 -c bootloader.c -o obj/bootloader.o
+	gcc -O0 -m32 -march=i386 -nostdlib -nostartfiles -nodefaultlibs -fno-builtin -c bootloader.c -o obj/bootloader.o
 	ld obj/bootloader.o -o bin/bootloader.bin -format=binary -Ttext=0x200 -melf_i386
 
 kernel: mbr bootloader
