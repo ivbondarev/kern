@@ -1,3 +1,6 @@
+#include "elf32.h"
+#include "lib.h"
+
 #define GDT_FLAGS_SZ 2
 #define GDT_FLAGS_GR 3
 #define GDT_AB_AC 0
@@ -19,9 +22,8 @@ struct gdt_entry {
 
 };
 
+/* Remember that .bss is not initialized yet.  */
 struct gdt_entry gdt_entries[4];
-
-static void kmemset(void *dst, char num, unsigned int sz);
 
 static void set_gdt_entry(struct gdt_entry *ent, unsigned int base,
 			  unsigned int limit, unsigned char access_byte,
@@ -29,29 +31,17 @@ static void set_gdt_entry(struct gdt_entry *ent, unsigned int base,
 
 void _start(void)
 {
-	*((int*)0xb8000)=0x07690748;
-	//kmemset(gdt_entries, 0, sizeof(gdt_entries));
-	/* null descriptor alread zeroed. */
+	void *kern = NULL;
 
-	// FIXME type & flags
-	//set_gdt_entry(&gdt_entries[1], 0, 0xFFFF, 0, 0);
+	/* kern = ..., laod with IDE PMIO driver. */
+
+	elf32_load_file(kern);
 
 	while (1)
 		;
-	return;
 }
 
-static void kmemset(void *dst, char num, unsigned int sz)
-{
-	char *mem = (char *)dst;
-
-	sz--;
-	while (sz >= 0) {
-		mem[sz] = num;
-		sz--;
-	}
-}
-
+__attribute__((unused))
 static void set_gdt_entry(struct gdt_entry *ent, unsigned int base,
 			  unsigned int limit, unsigned char access_byte,
 			  unsigned char flags)
