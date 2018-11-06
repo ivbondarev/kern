@@ -38,6 +38,7 @@ asm_main:
 	mov es, ax
 	mov fs, ax
 	mov gs, ax
+	mov ss, ax
 	jmp 0x08:0x8000 ; _start() function, 0x7E00 + 0x200
 
 text_sect_size equ roundup(($ - $$))
